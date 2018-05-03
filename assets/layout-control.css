@@ -1,0 +1,30 @@
+.layout-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.layout-control__save {
+    display: flex;
+    align-items: flex-start;
+}
+
+.layout-control__save-spinner {
+    flex: 0 0 20px;
+}
+
+.layout-control__name {
+    margin: 0;
+    border-right: 0;
+    height: 29px;
+    max-width: 250px;
+}
+
+.layout-control__save .uf-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.layout-control__buttons {
+
+}

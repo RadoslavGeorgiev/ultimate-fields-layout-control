@@ -2,21 +2,23 @@
 namespace Ultimate_Fields\Layout_Control;
 
 use Ultimate_Fields\Field as Base_Field;
-use Ultimate_Fields\Helper\Template;
+use Ultimate_Fields\Template;
 
 class Field extends Base_Field {
 	protected $field;
 
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'uf-field-layout-control' );
+		wp_enqueue_style( 'uf-field-layout-control' );
 
-		Template::add()
+		Template::add( 'layout-control', 'field/layout-control' );
 	}
 
 	public function export_field() {
 		$data = parent::export_field();
 		$data[ 'type' ] = 'Layout_Control';
 		$data[ 'field' ] = $this->field;
+		$data[ 'nonce' ] = wp_create_nonce( $this->get_nonce_action() );
 		return $data;
 	}
 
@@ -59,5 +61,48 @@ class Field extends Base_Field {
 		));
 
 		return $settings;
+	}
+
+	public function get_type() {
+		return 'Layout_Control';
+	}
+
+	/**
+	 * Returns the action for a nonce field.
+	 *
+	 * @since 3.0
+	 *
+	 * @return string
+	 */
+	protected function get_nonce_action() {
+		return 'uf_layout_control_' . $this->name;
+	}
+
+	/**
+	 * Performs AJAX.
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $action The action that is being performed.
+	 * @param mixed  $item   The item that is being edited.
+	 */
+	public function perform_ajax( $action, $item ) {
+		if( 'save_layout_' . $this->name != $action ) {
+			return;
+		}
+
+		$layout = wp_insert_post(array(
+			'post_type'    => 'uf-layout',
+			'post_status'  => 'publish',
+			'post_title'   => esc_html( $_POST['name'] ),
+			'post_content' => ' '
+		));
+
+		update_post_meta( $layout, '_layout', $_POST['layout'] );
+
+		echo json_encode( array(
+			'success' => true
+		));
+		exit;
 	}
 }

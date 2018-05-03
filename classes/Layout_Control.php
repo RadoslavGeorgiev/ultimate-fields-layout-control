@@ -1,6 +1,8 @@
 <?php
 namespace Ultimate_Fields\Layout_Control;
 
+use Ultimate_Fields\Template;
+
 class Layout_Control {
 	protected $plugin_file;
 
@@ -8,6 +10,7 @@ class Layout_Control {
 		$this->plugin_file = $plugin_file;
 
 		new Post_Type;
+		Template::instance()->add_path( dirname( $plugin_file ) . '/templates/' );
 
 		add_action( 'uf.ui.fields', array( $this, 'register_fields' ) );
 		add_filter( 'uf.field.class', array( $this, 'generate_field_class' ), 10, 2 );
@@ -24,7 +27,7 @@ class Layout_Control {
 	 * @return string
 	 */
 	public function generate_field_class( $class_name, $type ) {
-		if( 'layout_control' === $type ) {
+		if( 'layout_control' === strtolower( $type ) ) {
 			return Field::class;
 		} else {
 			return $class_name;
@@ -44,6 +47,7 @@ class Layout_Control {
 
 	public function register_scripts() {
 		wp_register_script( 'uf-field-layout-control', plugins_url( 'assets/field-layout-control.js', $this->plugin_file ), array( 'uf-field' ), '3.0' );
+		wp_register_style( 'uf-field-layout-control', plugins_url( 'assets/layout-control.css', $this->plugin_file ), array( 'ultimate-fields-css' ), '3.0' );
 
 	}
 }
