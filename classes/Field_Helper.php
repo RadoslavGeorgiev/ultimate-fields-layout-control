@@ -5,15 +5,15 @@ use Ultimate_Fields\UI\Field_Helper as Base_Field_Helper;
 use Ultimate_Fields\Field;
 
 /**
- * Handles the repeater field in the UI.
+ * Handles the field in the UI.
  *
- * @since 3.0
+ * @since 1.0
  */
 class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Returns the title of the field, as displayed in the type dropdown.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @return string
 	 */
@@ -24,7 +24,7 @@ class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Returns the UI editor fields.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @param Ultimate_Fields\Fields_Collection $existing The existing fields within the editor.
 	 * @return mixed[] A combination of field arrays for the different tabs/sections.
@@ -43,7 +43,7 @@ class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Sets the field up.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @return Field
 	 */
@@ -55,7 +55,7 @@ class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Imports some meta into the class.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @param mixed[] $field_data The settings of the field.
 	 */
@@ -66,7 +66,7 @@ class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Prepares data for import.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @param mixed[] $data The data that has been already generated + source data.
 	 * @return mixed[]
@@ -78,14 +78,12 @@ class Field_Helper extends Base_Field_Helper {
 	/**
 	 * Enqueues the scripts and templates for the field.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 */
 	public static function enqueue() {
 		// Template::add( 'repeater-prototype', 'field/repeater/prototype' );
-
 		// ultimate_fields()->localize( 'repeater-basic-placeholder-multiple', __( 'Drag an item here to create a new entry.', 'ultimate-fields' ) );
 
-		// Template::add( 'image-select', 'field/image-select' );
 		wp_enqueue_script( 'uf-field-layout-control' );
 	}
 }

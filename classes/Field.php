@@ -4,29 +4,70 @@ namespace Ultimate_Fields\Layout_Control;
 use Ultimate_Fields\Field as Base_Field;
 use Ultimate_Fields\Template;
 
+/**
+ * Handles the display of the field, which will control the layout.
+ *
+ * @since 1.0
+ */
 class Field extends Base_Field {
+	/**
+	 * The name of the field that is to be controlled.
+	 *
+	 * @since 1.0
+	 * @var string
+	 */
 	protected $field;
 
+	/**
+	 * Enqueues all scripts and templates, needed for the field.
+	 *
+	 * @since 1.0
+	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'uf-field-layout-control' );
 		wp_enqueue_style( 'uf-field-layout-control' );
 
 		Template::add( 'layout-control', 'field/layout-control' );
+		Template::add( 'layout-chooser', 'field/layout-chooser' );
 	}
 
+	/**
+	 * Exports the settings of the field for usage in JavaScript.
+	 *
+	 * @since 1.0
+	 *
+	 * @return array
+	 */
 	public function export_field() {
 		$data = parent::export_field();
+
 		$data[ 'type' ] = 'Layout_Control';
 		$data[ 'field' ] = $this->field;
 		$data[ 'nonce' ] = wp_create_nonce( $this->get_nonce_action() );
+
 		return $data;
 	}
 
+	/**
+	 * Allows the controlled field to be changed.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $field The name of the field.
+	 * @return Field
+	 */
 	public function set_field( $field ) {
 		$this->field = $field;
 		return $this;
 	}
 
+	/**
+	 * Returns the name of the controlled field.
+	 *
+	 * @since 1.0
+	 *
+	 * @return string
+	 */
 	public function get_field() {
 		return $this->field;
 	}
@@ -34,7 +75,7 @@ class Field extends Base_Field {
 	/**
 	 * Imports the field.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @param mixed[] $data The data for the field.
 	 */
@@ -49,7 +90,7 @@ class Field extends Base_Field {
 	/**
 	 * Generates the data for file exports.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @return mixed[]
 	 */
@@ -63,6 +104,13 @@ class Field extends Base_Field {
 		return $settings;
 	}
 
+	/**
+	 * Returns the internal name of the field type.
+	 *
+	 * @since 1.0
+	 *
+	 * @return string
+	 */
 	public function get_type() {
 		return 'Layout_Control';
 	}
@@ -70,7 +118,7 @@ class Field extends Base_Field {
 	/**
 	 * Returns the action for a nonce field.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @return string
 	 */
@@ -81,28 +129,25 @@ class Field extends Base_Field {
 	/**
 	 * Performs AJAX.
 	 *
-	 * @since 3.0
+	 * @since 1.0
 	 *
 	 * @param string $action The action that is being performed.
 	 * @param mixed  $item   The item that is being edited.
 	 */
 	public function perform_ajax( $action, $item ) {
-		if( 'save_layout_' . $this->name != $action ) {
-			return;
+		if( 'save_layout_' . $this->name === $action ) {
+			Post_Type::instance()->save( $_POST['name'], $_POST['layout'], $this->field );
+			die( json_encode( 1 ) );
 		}
 
-		$layout = wp_insert_post(array(
-			'post_type'    => 'uf-layout',
-			'post_status'  => 'publish',
-			'post_title'   => esc_html( $_POST['name'] ),
-			'post_content' => ' '
-		));
+		if( 'load_layouts_' . $this->name === $action ) {
+			$layouts = Post_Type::instance()->get_all( $this->field );
+			die( json_encode( $layouts ) );
+		}
 
-		update_post_meta( $layout, '_layout', $_POST['layout'] );
-
-		echo json_encode( array(
-			'success' => true
-		));
-		exit;
+		if( 'delete_layout_' . $this->name === $action ) {
+			Post_Type::instance()->delete( $_POST['layout_id'], $this->field );
+			die( json_encode( 1 ) );
+		}
 	}
 }

@@ -5,5 +5,6 @@
     </div>
 
     <div class="layout-control__load">
+		<div class="spinner layout-control__load-spinner"></div>
     </div>
 </div>
