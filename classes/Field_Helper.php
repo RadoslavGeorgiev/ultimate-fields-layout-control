@@ -3,6 +3,7 @@ namespace Ultimate_Fields\Layout_Control;
 
 use Ultimate_Fields\UI\Field_Helper as Base_Field_Helper;
 use Ultimate_Fields\Field;
+use Ultimate_Fields\Template;
 
 /**
  * Handles the field in the UI.
@@ -31,8 +32,10 @@ class Field_Helper extends Base_Field_Helper {
 	 */
 	public static function get_fields() {
 		$fields = array(
-			Field::create( 'field_selector', 'layout_control_field', __( 'Field', 'bla' ) )
-				->set_description( __( 'Please select the field to control.', 'bla' ) )
+			Field::create( 'field_selector', 'layout_control_field', __( 'Field', 'uf-layout-control' ) )
+				->set_description( __( 'Please select the field to control.', 'uf-layout-control' ) )
+				->add_type( 'Repeater' )
+				->add_type( 'Layout' )
 		);
 
 		return array(
@@ -81,9 +84,12 @@ class Field_Helper extends Base_Field_Helper {
 	 * @since 1.0
 	 */
 	public static function enqueue() {
-		// Template::add( 'repeater-prototype', 'field/repeater/prototype' );
-		// ultimate_fields()->localize( 'repeater-basic-placeholder-multiple', __( 'Drag an item here to create a new entry.', 'ultimate-fields' ) );
-
 		wp_enqueue_script( 'uf-field-layout-control' );
+		wp_enqueue_style( 'uf-field-layout-control' );
+
+		Template::add( 'layout-control', 'field/layout-control' );
+		Template::add( 'layout-chooser', 'field/layout-chooser' );
+
+		// ultimate_fields()->localize( 'repeater-basic-placeholder-multiple', __( 'Drag an item here to create a new entry.', 'ultimate-fields' ) );
 	}
 }

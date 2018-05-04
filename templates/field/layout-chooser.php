@@ -1,4 +1,4 @@
-<h3 class="layout-chooser__title"><?php _e( 'Select layout', 'bla' ) ?></h3>
+<h3 class="layout-chooser__title"><?php _e( 'Select layout', 'uf-layout-control' ) ?></h3>
 
 <div class="layout-chooser__body">
 	<% if( layouts.length ) { %>
@@ -14,10 +14,10 @@
 		<% }) %>
 	</ul>
 	<% } else { %>
-	<p class="layout-chooser__empty"><?php _e( 'No layouts found...', 'bla' ) ?></p>
+	<p class="layout-chooser__empty"><?php _e( 'No layouts found...', 'uf-layout-control' ) ?></p>
 	<% } %>
 </div>
 
 <div class="layout-chooser__footer">
-	<button type="button" class="button-secondary layout-chooser__cancel"><?php _e( 'Cancel', 'bla' ) ?></button>
+	<button type="button" class="button-secondary layout-chooser__cancel"><?php _e( 'Cancel', 'uf-layout-control' ) ?></button>
 </div>

@@ -70,6 +70,8 @@
 			var that = this,
 				data = this.model.datastore.get( this.model.get( 'field' ) );
 
+				console.log(data, this.model.get('field'));
+
 			// Hide the chooser first
 			if( this.chooser ) {
 				this.chooser.remove();
