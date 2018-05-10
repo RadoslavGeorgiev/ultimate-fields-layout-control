@@ -1,4 +1,4 @@
-<h3 class="layout-chooser__title"><?php _e( 'Select layout', 'uf-layout-control' ) ?></h3>
+<h3 class="layout-chooser__title"><%= dropdown_title %></h3>
 
 <div class="layout-chooser__body">
 	<% if( layouts.length ) { %>

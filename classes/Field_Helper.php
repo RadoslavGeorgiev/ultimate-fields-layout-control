@@ -36,6 +36,23 @@ class Field_Helper extends Base_Field_Helper {
 				->set_description( __( 'Please select the field to control.', 'uf-layout-control' ) )
 				->add_type( 'Repeater' )
 				->add_type( 'Layout' )
+				->add_type( 'Complex' ),
+			Field::create( 'complex', 'layout_control_strings', __( 'Strings', 'uf-layout-control' ) )
+				->merge()
+				->add_fields([
+					Field::create( 'text', 'layout_control_save_text', __( 'Save Text', 'uf-layout-control' ) )
+					 	->set_width( 50 )
+						->set_placeholder( __( 'Save Layout', 'uf-layout-control' ) ),
+					Field::create( 'text', 'layout_control_load_text', __( 'Load Text', 'uf-layout-control' ) )
+					 	->set_width( 50 )
+						->set_placeholder( __( 'Load Layout', 'uf-layout-control' ) ),
+					Field::create( 'text', 'layout_control_placeholder_text', __( 'Placeholder Text', 'uf-layout-control' ) )
+					 	->set_width( 50 )
+						->set_placeholder( __( 'Enter layout name...', 'uf-layout-control' ) ),
+					Field::create( 'text', 'layout_control_dropdown_title', __( 'Dropdown Title', 'uf-layout-control' ) )
+					 	->set_width( 50 )
+						->set_placeholder( __( 'Select Layout', 'uf-layout-control' ) )
+					])
 		);
 
 		return array(

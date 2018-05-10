@@ -19,6 +19,38 @@ class Field extends Base_Field {
 	protected $field;
 
 	/**
+	 * Holds the text, which will be used for the "Save Layout" button.
+	 *
+	 * @since 1.1
+	 * @var string
+	 */
+	protected $save_text;
+
+	/**
+	 * Holds the text, which will be used for the "Load Layout" button.
+	 *
+	 * @since 1.1
+	 * @var string
+	 */
+	protected $load_text;
+
+	/**
+	 * Holds the placeholder text for the "Enter layout name..." field.
+	 *
+	 * @since 1.1
+	 * @var string
+	 */
+	protected $placeholder_text;
+
+	/**
+	 * Holds the text for the header of the "Select Layout" dropdown.
+	 *
+	 * @since 1.1
+	 * @var string
+	 */
+	protected $dropdown_title;
+
+	/**
 	 * Enqueues all scripts and templates, needed for the field.
 	 *
 	 * @since 1.0
@@ -41,9 +73,29 @@ class Field extends Base_Field {
 	public function export_field() {
 		$data = parent::export_field();
 
-		$data[ 'type' ] = 'Layout_Control';
-		$data[ 'field' ] = $this->field;
-		$data[ 'nonce' ] = wp_create_nonce( $this->get_nonce_action() );
+		$save_text = $this->save_text
+			? $this->save_text
+			: __( 'Save Layout', 'uf-layout-control' );
+
+		$load_text = $this->load_text
+			? $this->load_text
+			: __( 'Load Layout', 'uf-layout-control' );
+
+		$placeholder_text = $this->placeholder_text
+			? $this->placeholder_text
+			: __( 'Enter layout name...', 'uf-layout-control' );
+
+		$dropdown_title = $this->dropdown_title
+			? $this->dropdown_title
+			: __( 'Select Layout', 'uf-layout-control' );
+
+		$data[ 'type' ]           = 'Layout_Control';
+		$data[ 'field' ]          = $this->field;
+		$data[ 'nonce' ]          = wp_create_nonce( $this->get_nonce_action() );
+		$data['save_text']        = $save_text;
+		$data['load_text']        = $load_text;
+		$data['placeholder_text'] = $placeholder_text;
+		$data['dropdown_title']   = $dropdown_title;
 
 		return $data;
 	}
@@ -83,7 +135,11 @@ class Field extends Base_Field {
 		parent::import( $data );
 
 		$this->proxy_data_to_setters( $data, array(
-			'layout_control_field' => 'set_field'
+			'layout_control_field'            => 'set_field',
+			'layout_control_save_text'        => 'set_save_text',
+			'layout_control_load_text'        => 'set_load_text',
+			'layout_control_placeholder_text' => 'set_placeholder_text',
+			'layout_control_dropdown_title'   => 'set_dropdown_title'
 		));
 	}
 
@@ -98,7 +154,11 @@ class Field extends Base_Field {
 		$settings = parent::export();
 
 		$this->export_properties( $settings, array(
-			'field' => array( 'layout_control_field', null )
+			'field'            => array( 'layout_control_field', null ),
+			'save_text'        => array( 'layout_control_save_text', null ),
+			'load_text'        => array( 'layout_control_load_text', null ),
+			'placeholder_text' => array( 'layout_control_placeholder_text', null ),
+			'dropdown_title'   => array( 'layout_control_dropdown_title', null )
 		));
 
 		return $settings;
@@ -150,4 +210,45 @@ class Field extends Base_Field {
 			die( json_encode( 1 ) );
 		}
 	}
+
+	/**
+	 * String setters and getters.
+	 */
+
+	public function set_save_text( $text ) {
+		$this->save_text = $text;
+		return $this;
+	}
+
+	public function get_save_text() {
+		return $this->save_text;
+	}
+
+	public function set_load_text( $text ) {
+		$this->load_text = $text;
+		return $this;
+	}
+
+	public function get_load_text() {
+		return $this->load_text;
+	}
+
+	public function set_placeholder_text( $text ) {
+		$this->placeholder_text = $text;
+		return $this;
+	}
+
+	public function get_placeholder_text() {
+		return $this->placeholder_text;
+	}
+
+	public function set_dropdown_title( $text ) {
+		$this->dropdown_title = $text;
+		return $this;
+	}
+
+	public function get_dropdown_title() {
+		return $this->dropdown_title;
+	}
+
 }

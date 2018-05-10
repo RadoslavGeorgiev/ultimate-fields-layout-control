@@ -44,7 +44,7 @@
 
 			// Add buttons and etc
 			var saveButton = new UltimateFields.Button({
-				text: 'Save Layout',
+				text: this.model.get( 'save_text' ),
 				icon: 'dashicons-migrate',
 				callback: _.bind( this.saveClicked, this )
 			});
@@ -53,7 +53,7 @@
 			saveButton.render();
 
 			var loadButton = new UltimateFields.Button({
-				text: 'Load Layout',
+				text: this.model.get( 'load_text' ),
 				type: 'primary',
 				icon: 'dashicons-category',
 				callback: _.bind( this.loadClicked, this )
@@ -70,15 +70,13 @@
 			var that = this,
 				data = this.model.datastore.get( this.model.get( 'field' ) );
 
-				console.log(data, this.model.get('field'));
-
 			// Hide the chooser first
 			if( this.chooser ) {
 				this.chooser.remove();
 				this.chooser = null;
 			}
 
-			if( ! data || ! data.length ) {
+			if( ! data || ( ( 'length' in data ) && ! data.length ) ) {
 				return this.showError( 'Empty layouts cannot be saved.' );
 			}
 
@@ -185,6 +183,7 @@
 				tmpl = UltimateFields.template( 'layout-chooser' );
 
 			this.$el.html( tmpl({
+				dropdown_title: this.model.get( 'dropdown_title' ),
 				layouts: this.layouts
 			}));
 		},

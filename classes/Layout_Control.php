@@ -42,6 +42,7 @@ class Layout_Control {
 		add_action( 'uf.ui.fields', array( $this, 'register_fields' ) );
 		add_filter( 'uf.field.class', array( $this, 'generate_field_class' ), 10, 2 );
 		add_action( 'uf.register_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'uf.enqueue_scripts', array( $this, 'enqueue_ui_scripts' ) );
 	}
 
 	/**
@@ -83,5 +84,21 @@ class Layout_Control {
 
 		wp_register_script( 'uf-field-layout-control', $assets . 'field-layout-control.js', array( 'uf-field' ), $v );
 		wp_register_style( 'uf-field-layout-control', $assets . 'layout-control.css', array( 'ultimate-fields-css' ), $v );
+	}
+
+	/**
+	 * Enqueues a field helper script for the admin.
+	 *
+	 * @since 1.1
+	 */
+	public function enqueue_ui_scripts() {
+		if( ! is_admin() || 'ultimate-fields' != get_current_screen()->post_type )
+			return;
+
+		// Enqueue assets for the UI
+		$assets = plugins_url( 'assets/', $this->plugin_file );
+		$v      = $this->version;
+
+		wp_enqueue_script( 'uf-field-layout-control-helper', $assets . 'helper-layout-control.js', array( 'uf-ui-field-helpers' ), $v );
 	}
 }
